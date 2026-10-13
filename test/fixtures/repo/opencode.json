@@ -1,0 +1,8 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["docs/style-*.md"],
+  "mcp": {
+    "tracker": { "type": "local", "command": ["node", "tools/tracker-mcp.mjs"], "enabled": true },
+    "old-server": { "type": "local", "command": ["node", "old.js"], "enabled": false }
+  }
+}

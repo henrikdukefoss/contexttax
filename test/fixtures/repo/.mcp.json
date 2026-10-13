@@ -1,0 +1,6 @@
+{
+  "mcpServers": {
+    "tracker": { "command": "node", "args": ["tools/tracker-mcp.mjs"] },
+    "docs-search": { "type": "http", "url": "https://docs.example.com/mcp" }
+  }
+}

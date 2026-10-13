@@ -1,0 +1,12 @@
+model = "gpt-6-sol"
+
+# a server that is not installed, to show a failed probe
+[mcp_servers.notes]
+command = "contexttax-missing-server"
+args = [
+  "--stdio",
+]
+
+[mcp_servers.disabled-one]
+command = "node"
+enabled = false

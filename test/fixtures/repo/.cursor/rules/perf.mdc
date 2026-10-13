@@ -1,0 +1,5 @@
+---
+description: Performance checklist for slow pages and heavy queries
+alwaysApply: false
+---
+- Check the query plan before adding caching.

@@ -1,0 +1,7 @@
+---
+description: House style for TypeScript
+alwaysApply: true
+---
+- Prefer named exports.
+- No default exports in the API.
+- Keep functions under 40 lines where possible.

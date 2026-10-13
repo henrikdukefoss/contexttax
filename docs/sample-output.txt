@@ -1,0 +1,77 @@
+CONTEXT TAX  sample-app                                       contexttax 0.1.0
+
+Cursor adds an estimated 3,313 tokens of instructions, tool schemas and
+descriptions to every request in this repo, before your prompt. That is 3.3%
+of a typical coding-agent request.
+
+AGENT                                   TOKENS   SHARE OF A TYPICAL REQUEST
+Cursor                                   3,313   3.3%
+OpenCode                                 3,298   3.3%
+Claude Code                              2,148   2.2%    + 1 MCP server not measured
+Codex CLI                                  384   0.4%
+Gemini CLI                                  67   0.1%
+GitHub Copilot                              45   <0.1%
+Aider                                       19   <0.1%
+Cline                                       18   <0.1%
+
+LARGEST FIRST                           TOKENS   LOADED BY
+MCP tracker (18 tools)                   2,867   OpenCode, Cursor
+  .mcp.json, .cursor/mcp.json, opencode.json, probed
+  Claude Code: 181 tokens per request, tool search loads the schemas on demand
+docs/architecture.md                     1,193   Claude Code
+  @-imported by CLAUDE.md
+AGENTS.md                                  384   Claude Code, Codex CLI,
+                                                 OpenCode, Cursor
+  @-imported by CLAUDE.md
+CLAUDE.md                                  163   Claude Code
+.claude/skills (2 skills)                   91   Claude Code
+  plus 1 that loads on demand only
+.claude/rules (1 rule)                      55   Claude Code
+  plus 1 that loads on demand only
+.claude/agents (1 subagent)                 54   Claude Code
+docs/style-guide.md                         47   OpenCode, Gemini CLI
+  instructions in opencode.json
+  @-imported by GEMINI.md
+.github/copilot-instructions.md             45   Copilot
+.cursor/rules (2 rules)                     44   Cursor
+  plus 1 that loads on demand only
+.claude/commands (1 command)                27   Claude Code
+GEMINI.md                                   20   Gemini CLI
+CONVENTIONS.md                              19   Aider
+  only when passed with --read
+.clinerules (1 rule)                        18   Cline
+.cursorrules                                18   Cursor
+MCP docs-search                              ?   Claude Code
+  .mcp.json, remote (http), not probed
+
+COST PER 1,000 REQUESTS (CURSOR, 3,313 TOKENS EACH)
+MODEL                                   CACHE READ    UNCACHED
+claude-opus-5-5                              $0.66      $13.25
+claude-sonnet-5-5                            $0.33       $6.63
+gpt-6-sol                                    $0.66       $6.63
+gpt-6-luna                                   $0.03       $0.33
+glm-5.3                                      $0.86       $4.64
+List prices for input tokens. Cache read: the prefix is served from the
+provider cache. Uncached: a cold start or a changed prefix.
+
+WHAT TO DO
+1. The tracker MCP server adds 2.9K tokens to every OpenCode and Cursor
+   request (18 tools). If this repo rarely needs it, remove it from
+   .cursor/mcp.json and opencode.json. Claude Code already loads it on demand
+   with tool search.
+2. docs/architecture.md is @-imported by CLAUDE.md and adds 1.2K tokens to
+   every Claude Code request. Mention the path without the @ and the agent
+   opens it only when it needs it.
+3. AGENTS.md and CLAUDE.md repeat about 67 tokens of the same lines, and
+   Claude Code loads both. Keep one copy.
+
+Token counts are estimates: about 3.7 characters per token for text and 3.0
+for JSON schemas. The agent's own system prompt and built-in tools come on
+top.
+Typical request: 99,554 input tokens, the median coding-agent request.
+Source: Standard Compute, The Agent Burn Index, October 2026,
+standardcompute.com/agent-burn-index
+Prices: LiteLLM (bundled), 2026-10-13. Read on this machine; nothing was
+uploaded.
+
+contexttax, made by Standard Compute (standardcompute.com)

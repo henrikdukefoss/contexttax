@@ -1,0 +1,47 @@
+{
+  "name": "contexttax",
+  "version": "0.1.0",
+  "description": "Measures the context tax: the tokens every coding-agent request carries before you type anything (CLAUDE.md, AGENTS.md, rules, MCP tool schemas, skills).",
+  "type": "module",
+  "bin": {
+    "contexttax": "bin/contexttax.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "sample": "node scripts/make-sample.js",
+    "update-prices": "node scripts/update-fallback-prices.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude-code",
+    "codex",
+    "opencode",
+    "cursor",
+    "mcp",
+    "claude-md",
+    "agents-md",
+    "tokens",
+    "context",
+    "cost",
+    "llm",
+    "cli"
+  ],
+  "author": "Standard Compute (https://standardcompute.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/henrikdukefoss/contexttax#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henrikdukefoss/contexttax.git"
+  },
+  "bugs": {
+    "url": "https://github.com/henrikdukefoss/contexttax/issues"
+  }
+}

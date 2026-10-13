@@ -1,0 +1,6 @@
+---
+description: API route conventions
+globs: api/src/routes/**/*.ts
+alwaysApply: false
+---
+- Validate input with the shared schemas.
