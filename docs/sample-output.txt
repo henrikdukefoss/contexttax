@@ -8,9 +8,9 @@ AGENT                                   TOKENS   SHARE OF A TYPICAL REQUEST
 Cursor                                   3,313   3.3%
 OpenCode                                 3,298   3.3%
 Claude Code                              2,148   2.2%    + 1 MCP server not measured
+GitHub Copilot                             429   0.4%
 Codex CLI                                  384   0.4%
 Gemini CLI                                  67   0.1%
-GitHub Copilot                              45   <0.1%
 Aider                                       19   <0.1%
 Cline                                       18   <0.1%
 
@@ -21,7 +21,7 @@ MCP tracker (18 tools)                   2,867   OpenCode, Cursor
 docs/architecture.md                     1,193   Claude Code
   @-imported by CLAUDE.md
 AGENTS.md                                  384   Claude Code, Codex CLI,
-                                                 OpenCode, Cursor
+                                                 OpenCode, Cursor, Copilot
   @-imported by CLAUDE.md
 CLAUDE.md                                  163   Claude Code
 .claude/skills (2 skills)                   91   Claude Code

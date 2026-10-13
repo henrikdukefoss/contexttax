@@ -27,9 +27,9 @@ AGENT                                   TOKENS   SHARE OF A TYPICAL REQUEST
 Cursor                                   3,313   3.3%
 OpenCode                                 3,298   3.3%
 Claude Code                              2,148   2.2%    + 1 MCP server not measured
+GitHub Copilot                             429   0.4%
 Codex CLI                                  384   0.4%
 Gemini CLI                                  67   0.1%
-GitHub Copilot                              45   <0.1%
 Aider                                       19   <0.1%
 Cline                                       18   <0.1%
 
@@ -40,7 +40,7 @@ MCP tracker (18 tools)                   2,867   OpenCode, Cursor
 docs/architecture.md                     1,193   Claude Code
   @-imported by CLAUDE.md
 AGENTS.md                                  384   Claude Code, Codex CLI,
-                                                 OpenCode, Cursor
+                                                 OpenCode, Cursor, Copilot
   @-imported by CLAUDE.md
 CLAUDE.md                                  163   Claude Code
 .claude/skills (2 skills)                   91   Claude Code
@@ -134,7 +134,7 @@ the tax and are left out.
 | Cursor | `.cursorrules`, `AGENTS.md`, `.cursor/rules` with `alwaysApply: true` (whole rule) or a description and no globs (description only), MCP servers from `.cursor/mcp.json` and `~/.cursor/mcp.json` |
 | Gemini CLI | `GEMINI.md` from this folder up to the repo root, `~/.gemini/GEMINI.md`, `@path` imports, MCP servers from `.gemini/settings.json` and `~/.gemini/settings.json` |
 | Cline | `.clinerules` (a file, or a folder of rules without `paths:` frontmatter) |
-| GitHub Copilot | `.github/copilot-instructions.md` |
+| GitHub Copilot | `.github/copilot-instructions.md` and `AGENTS.md` from the repo root down to this folder ([custom instructions support](https://docs.github.com/en/copilot/reference/custom-instructions-support), [Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions)). Copilot CLI also reads `CLAUDE.md`, `GEMINI.md` and `@` references; those are not counted for Copilot yet |
 | Aider | `CONVENTIONS.md` and files listed under `read:` in `.aider.conf.yml` (Aider loads them only when they are passed with `--read` or listed there) |
 
 Claude Code, following its [memory](https://code.claude.com/docs/en/memory), [skills](https://code.claude.com/docs/en/skills),
@@ -142,7 +142,11 @@ Claude Code, following its [memory](https://code.claude.com/docs/en/memory), [sk
 
 - `CLAUDE.md`, `.claude/CLAUDE.md` and `CLAUDE.local.md` in this folder and every folder above it,
   `~/.claude/CLAUDE.md` and the managed policy file
-- `@path` imports in those files, up to four hops, ignoring code spans and code blocks
+- when none of those three project files exist here or above, `AGENTS.md` and `.claude/AGENTS.md`
+  in their place ([Claude Code v2.1.277+](https://code.claude.com/docs/en/memory#agents-md))
+- `@path` imports in those files, up to four hops ("a maximum depth of four hops",
+  [memory docs](https://code.claude.com/docs/en/memory#import-additional-files)), ignoring code
+  spans and code blocks
 - `.claude/rules/**/*.md` and `~/.claude/rules` without `paths:` frontmatter
 - the first 200 lines of the project's auto memory `MEMORY.md`
 - skill names and descriptions from `.claude/skills/*/SKILL.md` and `~/.claude/skills`, capped

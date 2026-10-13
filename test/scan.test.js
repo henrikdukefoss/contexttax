@@ -18,7 +18,7 @@ test('scan: instruction files and which agents load them', () => {
   const repo = fixtureRepo();
   try {
     const { items } = scan(makeContext({ dir: repo.dir, env: fixtureEnv() }));
-    assert.deepEqual(agentsOf(byPath(items, 'AGENTS.md')), ['claude-code', 'codex', 'cursor', 'opencode']);
+    assert.deepEqual(agentsOf(byPath(items, 'AGENTS.md')), ['claude-code', 'codex', 'copilot', 'cursor', 'opencode']);
     assert.equal(byPath(items, 'AGENTS.md').importedBy, 'CLAUDE.md');
     assert.deepEqual(agentsOf(byPath(items, 'CLAUDE.md')), ['claude-code']);
     const arch = byPath(items, 'docs/architecture.md');
@@ -113,8 +113,36 @@ test('scan: a subfolder still finds the repo-root files and parent CLAUDE.md', (
     writeFileSync(join(repo.dir, 'api', 'AGENTS.md'), 'API-specific notes.');
     const { items } = scan(makeContext({ dir: sub, env: fixtureEnv() }));
     assert.ok(byPath(items, 'CLAUDE.md'));
-    assert.deepEqual(agentsOf(byPath(items, 'api/AGENTS.md')), ['codex', 'opencode']);
+    assert.deepEqual(agentsOf(byPath(items, 'api/AGENTS.md')), ['codex', 'copilot', 'opencode']);
     assert.ok(items.some((i) => i.label === 'tracker'));
+  } finally {
+    repo.cleanup();
+  }
+});
+
+test('scan: Claude Code follows @imports up to four hops', () => {
+  const repo = fixtureRepo();
+  try {
+    writeFileSync(join(repo.dir, 'CLAUDE.md'), '@hop1.md');
+    for (let i = 1; i <= 5; i++) writeFileSync(join(repo.dir, `hop${i}.md`), i < 5 ? `Hop ${i}. @hop${i + 1}.md` : 'Hop 5.');
+    const { items } = scan(makeContext({ dir: repo.dir, env: fixtureEnv() }));
+    for (let i = 1; i <= 4; i++) assert.deepEqual(agentsOf(byPath(items, `hop${i}.md`)), ['claude-code'], `hop${i}.md`);
+    assert.equal(byPath(items, 'hop5.md'), undefined);
+  } finally {
+    repo.cleanup();
+  }
+});
+
+test('scan: without a CLAUDE.md, Claude Code reads AGENTS.md and its imports', () => {
+  const repo = fixtureRepo();
+  try {
+    rmSync(join(repo.dir, 'CLAUDE.md'));
+    writeFileSync(join(repo.dir, 'AGENTS.md'), 'Shared rules. @docs/architecture.md');
+    const { items } = scan(makeContext({ dir: repo.dir, env: fixtureEnv() }));
+    const agents = byPath(items, 'AGENTS.md');
+    assert.notEqual(agents.kind, 'import');
+    assert.deepEqual(agentsOf(agents), ['claude-code', 'codex', 'copilot', 'cursor', 'opencode']);
+    assert.deepEqual(agentsOf(byPath(items, 'docs/architecture.md')), ['claude-code']);
   } finally {
     repo.cleanup();
   }

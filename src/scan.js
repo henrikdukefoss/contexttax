@@ -157,10 +157,18 @@ function claudeCode(ctx, items) {
   items.file(join(ctx.claudeDir, 'CLAUDE.md'), A, { imports, scope: 'user' });
   rulesGroup(items, A, join(ctx.claudeDir, 'rules'), 'user');
   // cwd and every directory above it, outermost first
-  for (const d of ancestors(ctx.target).reverse()) {
+  const dirs = ancestors(ctx.target).reverse();
+  // With no CLAUDE.md, .claude/CLAUDE.md or CLAUDE.local.md here or above, Claude Code reads
+  // AGENTS.md and .claude/AGENTS.md instead (v2.1.277+, code.claude.com/docs/en/memory#agents-md)
+  const agentsMd = !dirs.some((d) => ['CLAUDE.md', join('.claude', 'CLAUDE.md'), 'CLAUDE.local.md'].some((f) => isFile(join(d, f))));
+  for (const d of dirs) {
     items.file(join(d, 'CLAUDE.md'), A, { imports });
     items.file(join(d, '.claude', 'CLAUDE.md'), A, { imports });
     items.file(join(d, 'CLAUDE.local.md'), A, { imports, scope: 'user' });
+    if (agentsMd) {
+      items.file(join(d, 'AGENTS.md'), A, { imports });
+      items.file(join(d, '.claude', 'AGENTS.md'), A, { imports });
+    }
   }
   for (const d of new Set([ctx.root, ctx.target])) rulesGroup(items, A, join(d, '.claude', 'rules'), 'repo');
   autoMemory(ctx, items, A);
@@ -329,7 +337,7 @@ function cursor(ctx, items) {
 
 function gemini(ctx, items) {
   const A = 'gemini-cli';
-  const imports = 5;
+  const imports = 4;
   items.file(join(ctx.geminiHome, 'GEMINI.md'), A, { imports, scope: 'user' });
   for (const d of ancestors(ctx.target, ctx.root).reverse()) items.file(join(d, 'GEMINI.md'), A, { imports });
 }
@@ -346,8 +354,11 @@ function cline(ctx, items) {
   items.group(`group:${real(p)}`, A, { kind: 'rules', label: items.show(p), scope: 'repo', children });
 }
 
+// Copilot CLI, VS Code and the cloud agent read AGENTS.md next to copilot-instructions.md
+// (docs.github.com/en/copilot/reference/custom-instructions-support)
 function copilot(ctx, items) {
   items.file(join(ctx.root, '.github', 'copilot-instructions.md'), 'copilot');
+  for (const d of ancestors(ctx.target, ctx.root).reverse()) items.file(join(d, 'AGENTS.md'), 'copilot');
 }
 
 function aider(ctx, items) {
