@@ -228,6 +228,16 @@ Run it again after you trim your instructions to update the number.
 - The badge contains one number. Check the report before you paste it anywhere: it shows file
   paths and MCP server names.
 
+## Related guides
+
+Written by Standard Compute, which makes contexttax:
+
+- [contexttax on the web](https://standardcompute.com/tools/context-tax): what the per-request token cost of CLAUDE.md, AGENTS.md and MCP tools means.
+- [Reduce Claude Code token usage](https://standardcompute.com/reduce-claude-code-token-usage): ten levers ranked with real data, including instruction files and MCP tools.
+- [Fixing "maximum context length exceeded" (400)](https://standardcompute.com/fix/context-length-exceeded): when the context fills up before the conversation does.
+- [The Agent Burn Index](https://standardcompute.com/agent-burn-index): how many tokens AI coding agents use, measured.
+- [How to cut your AI agent's API bill](https://standardcompute.com/cut-ai-agent-api-costs): seven tactics, with per-agent pages.
+
 ## Contributing
 
 ```sh
